@@ -1,7 +1,7 @@
 # Labirynth
 A simple implementation of maze generation in c++
 
-## 200x200 Maze Generation
+## 100x100 Maze Generation
 ![2023-04-01 23-40-32](https://user-images.githubusercontent.com/58781463/229315427-472b741f-4fad-4205-ba8f-a32bccd7dd7d.gif)
 
 
