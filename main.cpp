@@ -15,7 +15,7 @@ result.setFillColor(color);
 return result;
 }
 int main(){
-    sf::RenderWindow window(sf::VideoMode(1000,1000),"Labirynth Generator" );
+    sf::RenderWindow window(sf::VideoMode(1000,1000),"Maze Generator" );
     Labirynth labirynth(100,100);
     window.clear();
     window.draw(labirynth);
@@ -116,6 +116,8 @@ int main(){
             labirynthView.setSize(600.f,600.f);
         }
         else if(buttonChange.click(mousePos)){
+
+            for(auto &x : textBoxes) if(x.getTextValue().empty()) x.addCharacter('0');
             labirynth.setMazeWidth(std::stoi(textBoxes[0].getTextValue()));
             labirynth.setMazeHeight(std::stoi(textBoxes[1].getTextValue()));
             labirynth.setBorderSize(std::stoi(textBoxes[2].getTextValue()));
