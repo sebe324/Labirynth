@@ -117,7 +117,12 @@ int main(){
         }
         else if(buttonChange.click(mousePos)){
 
-            for(auto &x : textBoxes) if(x.getTextValue().empty()) x.addCharacter('0');
+            for(int i=0; i<textBoxes.size(); i++){
+            if(!textBoxes[i].getTextValue().length()>0){
+                        textBoxes[i].text.setString("0");
+            }
+            }
+
             labirynth.setMazeWidth(std::stoi(textBoxes[0].getTextValue()));
             labirynth.setMazeHeight(std::stoi(textBoxes[1].getTextValue()));
             labirynth.setBorderSize(std::stoi(textBoxes[2].getTextValue()));

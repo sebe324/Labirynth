@@ -47,7 +47,7 @@ target.draw(text,states);
 }
 
 std::string Textbox::getTextValue(){
-return text.getString();
+return text.getString().toAnsiString();
 }
 void Textbox::setMaxSize(int n){
 maxSize=n;
