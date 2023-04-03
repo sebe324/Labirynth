@@ -22,6 +22,7 @@ int main(){
     window.display();
     sf::Clock clock;
     sf::View labirynthView(sf::FloatRect(0.f,0.f,600.f,600.f));
+    sf::View mainView(sf::FloatRect(0.f,0.f,1000.f,1000.f));
     labirynthView.setViewport(sf::FloatRect(0.02f,0.02f,0.6f,0.6f));
     sf::RectangleShape background(sf::Vector2f(600.f,600.f));
     background.setFillColor(sf::Color(60,60,60));
@@ -49,6 +50,11 @@ int main(){
     buttonChange.hoverBodyColor=sf::Color(70,70,70);
     buttonChange.hoverContentColor=sf::Color::White;
 
+    Button buttonExit("Exit",32,sf::Color(240,240,240), {725.f,400.f},{150.f,50.f},sf::Color(99,99,99),font);
+    buttonExit.hoverBodyColor=sf::Color(70,70,70);
+    buttonExit.hoverContentColor=sf::Color::White;
+
+    sf::Text timeTaken=createText("Time Taken 0s", font,{20.f,630.f});
     std::vector<Textbox> textBoxes{
         Textbox("100",font,{100.f,760.f},30,sf::Color::White,sf::Color(70,70,70)),
         Textbox("100",font,{200.f,760.f},30,sf::Color::White,sf::Color(70,70,70)),
@@ -115,6 +121,9 @@ int main(){
             labirynth.reset();
             labirynthView.setSize(600.f,600.f);
         }
+         else if(buttonExit.click(mousePos)){
+            window.close();
+        }
         else if(buttonChange.click(mousePos)){
 
             for(int i=0; i<textBoxes.size(); i++){
@@ -122,7 +131,6 @@ int main(){
                         textBoxes[i].text.setString("0");
             }
             }
-
             labirynth.setMazeWidth(std::stoi(textBoxes[0].getTextValue()));
             labirynth.setMazeHeight(std::stoi(textBoxes[1].getTextValue()));
             labirynth.setBorderSize(std::stoi(textBoxes[2].getTextValue()));
@@ -161,6 +169,7 @@ int main(){
         buttonStart.update(mousePos);
         buttonReset.update(mousePos);
         buttonChange.update(mousePos);
+        buttonExit.update(mousePos);
         }
            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
             velocity.y=-1000.f*deltaTime.asSeconds()*labScale;
@@ -176,7 +185,7 @@ int main(){
         }
         labirynthView.move(velocity*=0.9f);
         if(labirynth.createMaze()){
-        std::cout<<"Time taken: "<<clock.restart().asSeconds()<<std::endl;
+        timeTaken.setString("Time Taken " + std::to_string(clock.restart().asSeconds())+"s");
          labirynth.reset();
         }
         window.clear(sf::Color(20.f,20.f,20.f));
@@ -188,9 +197,11 @@ int main(){
         window.draw(buttonStart);
         window.draw(buttonReset);
         window.draw(buttonChange);
+        window.draw(buttonExit);
         for(int i=0; i<labels.size(); i++){
             window.draw(labels[i]);
         }
+        window.draw(timeTaken);
         for(int i=0; i<textBoxes.size(); i++) window.draw(textBoxes[i]);
         window.display();
         deltaTime=deltaClock.restart();

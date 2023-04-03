@@ -31,6 +31,9 @@ if(active){
             aux.pop_back();
             text.setString(aux);
         }
+        else if(c==8 && text.getString().isEmpty()){
+            //do nothing
+        }
         else if(text.getString().getSize()<maxSize){
         if(c==13){
                 text.setString(text.getString()+'\n');
