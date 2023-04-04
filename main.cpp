@@ -30,7 +30,8 @@ int main(){
     sf::Vector2f velocity;
     sf::Time deltaTime;
     sf::Clock deltaClock;
-
+    bool autoReset=true;
+    bool generated=false;
     sf::Font font;
     if(!font.loadFromFile("font.ttf")){}
 
@@ -46,7 +47,7 @@ int main(){
     buttonReset.hoverBodyColor=sf::Color(70,70,70);
     buttonReset.hoverContentColor=sf::Color::White;
 
-    Button buttonChange("Change",32,sf::Color(240,240,240), {725.f,570.f},{150.f,50.f},sf::Color(99,99,99),font);
+    Button buttonChange("Change",32,sf::Color(240,240,240), {360.f,630.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonChange.hoverBodyColor=sf::Color(70,70,70);
     buttonChange.hoverContentColor=sf::Color::White;
 
@@ -54,7 +55,12 @@ int main(){
     buttonExit.hoverBodyColor=sf::Color(70,70,70);
     buttonExit.hoverContentColor=sf::Color::White;
 
+    sf::Text doResetText=createText("Auto reset",font,{725.f,450.f});
+    Button buttonAutoReset("Yes",32,sf::Color::Green, {725.f,500.f},{150.f,50.f},sf::Color(99,99,99),font);
+    buttonAutoReset.hoverBodyColor=sf::Color(70,70,70);
+
     sf::Text timeTaken=createText("Time Taken 0s", font,{20.f,630.f});
+    sf::Time timeGeneration;
     std::vector<Textbox> textBoxes{
         Textbox("100",font,{100.f,760.f},30,sf::Color::White,sf::Color(70,70,70)),
         Textbox("100",font,{200.f,760.f},30,sf::Color::White,sf::Color(70,70,70)),
@@ -99,6 +105,14 @@ int main(){
         sf::Event event;
         while (window.pollEvent(event)){
             if(event.type==sf::Event::Closed) window.close();
+            else if(event.type==sf::Event::Resized){
+                sf::Vector2u windowSize=window.getSize();
+                float idk=(float)windowSize.y/windowSize.x;
+                float idk2=(1.f-idk)*0.5;
+                mainView.setViewport(sf::FloatRect(idk2, 0.f, idk, 1));
+                labirynthView.setViewport(sf::FloatRect(idk2+0.02*idk, 0.02, idk*0.6, 0.6));
+                window.setView(mainView);
+            }
         if(event.type==sf::Event::MouseWheelScrolled){
             if(event.mouseWheelScroll.delta>0){
                 labirynthView.zoom(0.9f);
@@ -120,6 +134,8 @@ int main(){
             labirynthView.setCenter(300.f,300.f);
             labirynth.reset();
             labirynthView.setSize(600.f,600.f);
+            timeGeneration=sf::Time::Zero;
+            timeTaken.setString("Time Taken " + std::to_string((timeGeneration).asSeconds())+"s");
         }
          else if(buttonExit.click(mousePos)){
             window.close();
@@ -153,8 +169,21 @@ int main(){
             labirynthView.setCenter(300.f,300.f);
             labirynth.reset();
             labirynthView.setSize(600.f,600.f);
-
-
+            timeGeneration=sf::Time::Zero;
+            timeTaken.setString("Time Taken " + std::to_string((timeGeneration).asSeconds())+"s");
+        }
+        else if(buttonAutoReset.click(mousePos)){
+            autoReset=!autoReset;
+            if(autoReset){
+            buttonAutoReset.originalContentColor=sf::Color::Green;
+            buttonAutoReset.content.setString("Yes");
+            buttonAutoReset.hoverContentColor=sf::Color::Green;
+            }
+            else{
+            buttonAutoReset.originalContentColor=sf::Color::Red;
+            buttonAutoReset.content.setString("No");
+            buttonAutoReset.hoverContentColor=sf::Color::Red;
+            }
         }
         for(int i=0; i<textBoxes.size(); i++) textBoxes[i].isClicked(mousePos);
         }
@@ -170,6 +199,7 @@ int main(){
         buttonReset.update(mousePos);
         buttonChange.update(mousePos);
         buttonExit.update(mousePos);
+        buttonAutoReset.update(mousePos);
         }
            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
             velocity.y=-1000.f*deltaTime.asSeconds()*labScale;
@@ -185,19 +215,25 @@ int main(){
         }
         labirynthView.move(velocity*=0.9f);
         if(labirynth.createMaze()){
-        timeTaken.setString("Time Taken " + std::to_string(clock.restart().asSeconds())+"s");
-         labirynth.reset();
+         if(autoReset){
+                labirynth.reset();
+                timeGeneration=sf::Time::Zero;
+                }
         }
+        else if(labirynth.running)timeTaken.setString("Time Taken " + std::to_string((timeGeneration+=deltaTime).asSeconds())+"s");
+
         window.clear(sf::Color(20.f,20.f,20.f));
         window.draw(background);
         window.setView(labirynthView);
          window.draw(labirynth);
-        window.setView(window.getDefaultView());
+        window.setView(mainView);
         window.draw(buttonStop);
         window.draw(buttonStart);
         window.draw(buttonReset);
         window.draw(buttonChange);
         window.draw(buttonExit);
+        window.draw(buttonAutoReset);
+        window.draw(doResetText);
         for(int i=0; i<labels.size(); i++){
             window.draw(labels[i]);
         }
