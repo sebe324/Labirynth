@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 class Textbox : public sf::Drawable
 {
 

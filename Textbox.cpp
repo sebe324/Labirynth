@@ -27,7 +27,7 @@ else active=false;
 void Textbox::addCharacter(char c){
 if(active){
         if(c==8 && !text.getString().isEmpty()){
-            std::string aux=text.getString();
+            std::string aux=text.getString().toAnsiString();
             aux.pop_back();
             text.setString(aux);
         }
@@ -55,7 +55,7 @@ return text.getString().toAnsiString();
 void Textbox::setMaxSize(int n){
 maxSize=n;
 if(maxSize<text.getString().getSize()){
-std::string aux=text.getString();
+std::string aux=text.getString().toAnsiString();
 aux.erase(maxSize);
 text.setString(aux);
 changeBackground();
