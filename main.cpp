@@ -35,15 +35,15 @@ int main(){
     sf::Font font;
     if(!font.loadFromFile("font.ttf")){}
 
-    Button buttonStop("Stop",32,sf::Color(240,240,240), {725.f,100.f},{150.f,50.f},sf::Color(99,99,99),font);
+    Button buttonStop("Stop",32,sf::Color(240,240,240), {700.f,100.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonStop.hoverBodyColor=sf::Color(70,70,70);
     buttonStop.hoverContentColor=sf::Color::White;
 
-    Button buttonStart("Start",32,sf::Color(240,240,240), {725.f,200.f},{150.f,50.f},sf::Color(99,99,99),font);
+    Button buttonStart("Start",32,sf::Color(240,240,240), {700.f,200.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonStart.hoverBodyColor=sf::Color(70,70,70);
     buttonStart.hoverContentColor=sf::Color::White;
 
-    Button buttonReset("Reset",32,sf::Color(240,240,240), {725.f,300.f},{150.f,50.f},sf::Color(99,99,99),font);
+    Button buttonReset("Reset",32,sf::Color(240,240,240), {700.f,300.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonReset.hoverBodyColor=sf::Color(70,70,70);
     buttonReset.hoverContentColor=sf::Color::White;
 
@@ -51,13 +51,17 @@ int main(){
     buttonChange.hoverBodyColor=sf::Color(70,70,70);
     buttonChange.hoverContentColor=sf::Color::White;
 
-    Button buttonExit("Exit",32,sf::Color(240,240,240), {725.f,400.f},{150.f,50.f},sf::Color(99,99,99),font);
+    Button buttonExit("Exit",32,sf::Color(240,240,240), {700.f,400.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonExit.hoverBodyColor=sf::Color(70,70,70);
     buttonExit.hoverContentColor=sf::Color::White;
 
-    sf::Text doResetText=createText("Auto reset",font,{725.f,450.f});
-    Button buttonAutoReset("Yes",32,sf::Color::Green, {725.f,500.f},{150.f,50.f},sf::Color(99,99,99),font);
+    sf::Text doResetText=createText("Auto reset",font,{700.f,450.f});
+    Button buttonAutoReset("Yes",32,sf::Color::Green, {700.f,500.f},{150.f,50.f},sf::Color(99,99,99),font);
     buttonAutoReset.hoverBodyColor=sf::Color(70,70,70);
+
+    Button buttonSave("Save",32,sf::Color(240,240,240),{700.f,600.f},{150.f,50.f},sf::Color(99,99,99),font);
+    buttonSave.hoverBodyColor=sf::Color(70,70,70);
+    buttonSave.hoverContentColor=sf::Color::White;
 
     sf::Text timeTaken=createText("Time Taken 0s", font,{20.f,630.f});
     sf::Time timeGeneration;
@@ -185,6 +189,9 @@ int main(){
             buttonAutoReset.hoverContentColor=sf::Color::Red;
             }
         }
+        else if(buttonSave.click(mousePos)){
+            labirynth.saveToFile();
+        }
         for(int i=0; i<textBoxes.size(); i++) textBoxes[i].isClicked(mousePos);
         }
         if(event.type==sf::Event::TextEntered){
@@ -200,6 +207,7 @@ int main(){
         buttonChange.update(mousePos);
         buttonExit.update(mousePos);
         buttonAutoReset.update(mousePos);
+        buttonSave.update(mousePos);
         }
            if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)){
             velocity.y=-1000.f*deltaTime.asSeconds()*labScale;
@@ -234,6 +242,7 @@ int main(){
         window.draw(buttonExit);
         window.draw(buttonAutoReset);
         window.draw(doResetText);
+        window.draw(buttonSave);
         for(int i=0; i<labels.size(); i++){
             window.draw(labels[i]);
         }

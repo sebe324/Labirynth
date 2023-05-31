@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <cstring>
 #include <stack>
+#include <fstream>
+#include "Util.h"
 
 class Labirynth : public sf::Drawable{
 private:
@@ -52,6 +54,8 @@ public:
     void setVisitedColor(sf::Color color);
     void setUnvisitedColor(sf::Color color);
     void setBorderColor(sf::Color color);
+
+    void saveToFile();
 };
 
 #endif // LABIRYNTH_H

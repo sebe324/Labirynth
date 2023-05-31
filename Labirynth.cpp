@@ -163,3 +163,20 @@ target.draw(borderArrayEast);
 }
 }
 
+void Labirynth::saveToFile(){
+
+    if(!Util::doesDirectoryExist("saved_mazes"))
+        Util::createDirectory("saved_mazes");
+
+    std::ofstream file;
+    std::string time=Util::getCurrentTime();
+    file.open("saved_mazes"+Util::slash+time+".txt");
+    for(int i=0; i<mazeHeight; i++){
+        for(int j=0; j<mazeWidth; j++){
+            file<<maze[i*mazeWidth+j]<<";";
+        }
+        file<<"\n";
+    }
+    file.close();
+    Util::messageBox(std::string("File created at: ")+Util::getCurrentPath()+Util::slash+std::string("saved_images")+Util::slash+time+std::string(".txt"));
+ }
